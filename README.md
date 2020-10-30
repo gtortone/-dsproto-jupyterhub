@@ -13,8 +13,63 @@ Included Python libraries:
 
 # Deployment
 
-Start a Docker container 'pyroot-jupyterhub' in background on local port 8888
+### Configuration
+
+To share users between hosting machine and container SSSD (https://sssd.io/) can be used.
+
+- Install SSSD
+```
+yum install sssd
+```
+
+- Configure SSSD
+
+in /etc/pam.d/sss_proxy
 
 ```
-docker run -p 8888:8000 -d --name pyroot-jupyterhub gtortone/dsproto-jupyterhub
+auth required pam_unix.so
+account required pam_unix.so
+password required pam_unix.so
+session required pam_unix.so
+```
+
+- in /etc/sssd/sssd.conf
+
+```
+[sssd]
+services = nss, pam
+config_file_version = 2
+domains = proxy
+[nss]
+[pam]
+[domain/proxy]
+id_provider = proxy
+# The proxy provider will look into /etc/passwd for user info
+proxy_lib_name = files
+# The proxy provider will authenticate against /etc/pam.d/sss_proxy
+proxy_pam_target = sss_proxy
+```
+
+- set permissions
+```
+chmod 0600 /etc/sssd/sssd.conf
+```
+
+- enable at boot
+```
+systemctl enable sssd
+```
+
+### Container
+
+Start a Docker container 'jupyterhub' in background on local port 8888 and use SSSD sockets to share host machine users
+
+```
+docker run -it -d -p 8888:8000 -v /var/lib/sss/pipes/:/var/lib/sss/pipes/:rw --name jupyterhub gtortone/dsproto-jupyterhub
+```
+
+Bind host machine /home and /storage directories
+
+```
+docker run -it -d -p 8888:8000 -v /var/lib/sss/pipes/:/var/lib/sss/pipes/:rw -v /home:/home -v /storage:/storage --name jupyterhub gtortone/dsproto-jupyterhub
 ```
