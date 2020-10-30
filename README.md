@@ -13,8 +13,8 @@ Included Python libraries:
 
 # Deployment
 
-Start a Docker container 'pyroot-notebook' in background on local port 8888
+Start a Docker container 'pyroot-jupyterhub' in background on local port 8888
 
 ```
-docker run -p 8888:8000 -d --name pyroot-notebook gtortone/dsproto-jupyterhub
+docker run -p 8888:8000 -d --name pyroot-jupyterhub gtortone/dsproto-jupyterhub
 ```
