@@ -10,6 +10,15 @@ Included Python libraries:
 - recordtype 
 - lmfit
 - pandas
+- numericalunits
+- numba
+- lz4
+- cython
+- mpmath
+- sympy
+- astropy 
+- keras 
+- sklearn
 
 # Deployment
 
@@ -62,14 +71,23 @@ systemctl enable sssd
 
 ### Container
 
-Start a Docker container 'jupyterhub' in background on local port 8888 and use SSSD sockets to share host machine users
+#### Start JupyterHub Docker container in background on local port 8888 and use SSSD sockets to share host machine users
 
 ```
 docker run -it -d -p 8888:8000 -v /var/lib/sss/pipes/:/var/lib/sss/pipes/:rw --name jupyterhub gtortone/dsproto-jupyterhub
 ```
 
-Bind host machine /home and /storage directories
+#### Bind host machine /home and /storage directories
 
 ```
 docker run -it -d -p 8888:8000 -v /var/lib/sss/pipes/:/var/lib/sss/pipes/:rw -v /home:/home -v /storage:/storage --name jupyterhub gtortone/dsproto-jupyterhub
 ```
+
+### Start JupyterHub Docker container with SSL support
+```
+docker run -it -d -p 443:443 -v /var/lib/sss/pipes/:/var/lib/sss/pipes/:rw -v /home:/home -v /storage:/storage --name jupyterhub gtortone/dsproto-jupyterhub
+```
+- copy in /etc/jupyterhub SSL certificate (cert.pem) and SSL key (cert.key)
+
+- edit /etc/jupyterhub/jupyterhub_config.py
+
