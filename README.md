@@ -89,5 +89,15 @@ docker run -it -d -p 443:443 -v /var/lib/sss/pipes/:/var/lib/sss/pipes/:rw -v /h
 ```
 - copy in /etc/jupyterhub SSL certificate (cert.pem) and SSL key (cert.key)
 
+- set perms to cert.key
+```
+chmod 600 /etc/jupyterhub/cert.key
+```
+
 - edit /etc/jupyterhub/jupyterhub_config.py
+```
+c.JupyterHub.ssl_cert = '/etc/jupyterhub/cert.pem'
+c.JupyterHub.ssl_key = '/etc/jupyterhub/cert.key'
+c.JupyterHub.bind_url = 'https://:443'
+```
 
