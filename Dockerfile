@@ -8,7 +8,7 @@ RUN python3 -m pip install --upgrade pip setuptools wheel
 # After October 2020 errors can happen when installing or updating packages. Pip will change the way that it resolves dependency conflicts.
 # recommend use --use-feature=2020-resolver to test your packages with the new resolver before it becomes the default.
 RUN python3 -m pip --use-feature=2020-resolver install jupyter scipy uproot root-numpy matplotlib recordtype lmfit pandas jupyterhub
-RUN python3 -m pip --use-feature=2020-resolver install numericalunits numba lz4 cython mpmath sympy astropy keras sklearn
+RUN python3 -m pip --use-feature=2020-resolver install numericalunits numba lz4 cython mpmath sympy astropy keras sklearn tables
 
 RUN apt-get update && apt-get install -yq --no-install-recommends \
     build-essential \
